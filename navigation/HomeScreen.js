@@ -153,8 +153,6 @@ class HomeScreen extends React.Component {
     try {
       await AsyncStorage.setItem("@onBoardingPageLoad:key", "Another");
 
-
-
     } catch (error) {
       // Error saving data
     }
@@ -170,7 +168,7 @@ class HomeScreen extends React.Component {
           source={require('../assets/garoo/0001.png')}/>
       <View style={styles.row}>
 
-        <TouchableOpacity onPress={this.Website} style={styles.item}>
+        <TouchableOpacity onPress={this.SelectImage} style={styles.item}>
           <Image resizeMode="contain" source={profileIcon} style={styles.itemImage} />
           <Text style={styles.itemText}>Profile</Text>
         </TouchableOpacity>

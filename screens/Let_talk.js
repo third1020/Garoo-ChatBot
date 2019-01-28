@@ -8,6 +8,7 @@ import {
     Text,
     Button,
     Image,
+    Alert
 } from 'react-native';
 import {
     createSwitchNavigator,
@@ -26,27 +27,91 @@ import CheckSick from '../AbilityBot/CheckSick';
 import HomeScreen from '../navigation/HomeScreen';
 import FirstOpApp from '../navigation/FirstOpApp';
 import Q9 from '../navigation/Q9';
+import Need_help from './Need_help';
 import SelfHarm_Normal from './SelfHarm_Normal';
 import SelfHarm_NoNeed from './SelfHarm_NoNeed';
 import SelfHarm_Danger from './SelfHarm_Danger';
 
 import PropTypes from 'prop-types';
 
+class Start extends React.Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      askName: '',
+    };
+  }
+
+  getName = async () => {
+    try {
+      var name = await AsyncStorage.getItem('Name');
+          this.setState({
+            name: name
+          });
+    } catch (error) {
+      console.log(error);
+    }
+  }
+  componentWillMount() {
+    this.getName();
+
+    var that = this;
+}
+
+  render() {
+
+    return (
+      <Text>คุณต้องการเข้ารับการประเมินเบื้องต้นหรือไม่ การุสัญญานะ! ว่าจะเป็นประโยชน์ต่อตัว {this.state.name} มากๆเลยนะ 🙂 </Text>
+
+    );
+  }
+}
+
+Start.propTypes = {
+  steps: PropTypes.object,
+};
+
+Start.defaultProps = {
+  steps: undefined,
+};
+
 class ShowResult extends React.Component {
     static navigationOptions = {
         title: 'ShowResult',
     };
+    FirstOpApp = () => {
+        this.props.navigation.navigate('FirstOpApp');
+    };
+    Score = async (value) => {
+      try {
+        await AsyncStorage.setItem("Score", value);
 
+      } catch (error) {
+        // Error saving data
+      }
+    };
+    Score0() {
+      this.setState({ trigger: true }, () => {
+
+        this.props.triggerNextStep({value:"Score0",trigger:'Score0'});
+      });
+    }
+    triggetNext() {
+      this.setState({ trigger: true }, () => {
+
+        this.props.triggerNextStep({value:"endtest",trigger:'endtest'});
+      });
+    }
 
 
     constructor(props) {
     super(props);
 
-
-
-
-
     this.state = {
+      loading: true,
+      result: '',
+      trigger: false,
       askName: '',
 
       selfHarmQuestionChoice: '',
@@ -59,12 +124,16 @@ class ShowResult extends React.Component {
       selfHarmQuestionChoice7: '',
       selfHarmQuestionChoice8: '',
 
-
     };
+    this.triggetNext = this.triggetNext.bind(this);
+    this.Score0 = this.Score0.bind(this);
+
   }
 
   componentWillMount() {
     const { steps } = this.props;
+
+
 
 
     const { askName,selfHarmQuestionChoice,selfHarmQuestionChoice2,
@@ -84,12 +153,15 @@ class ShowResult extends React.Component {
 
 
 
+
+
+
+
                     if (score == 0) {word = " จากการประเมินเบื้องต้นเราพบว่าคุณไม่มีความเสี่ยงในการทำร้ายตนเองและการฆ่าตัวตาย"
+
 
                                      // ,help="ขอบคุณนะ Mindbot",
                                      // nohelp="แล้วเจอกันอีกนะ Mindbot",
-                                     // patch="{() => this.props.navigation.navigate('SCORE5T8')}"
-
 
                                    } //score =0
                     else if (score > 0 && score < 2 ) {word =" จากการประเมินเบื้องต้นเราพบว่าคุณมีความเสี่ยงในการทำร้ายตัวเองในระดับปานกลาง และความเสี่ยงในการฆ่าตัวตายในระดับน้อย"
@@ -118,29 +190,70 @@ class ShowResult extends React.Component {
                                                      }//score > 16
                     else { word= "Error" }
 
+
+
   }
 
   render() {
+
     const { askName,selfHarmQuestionChoice,selfHarmQuestionChoice2,
             selfHarmQuestionChoice3,selfHarmQuestionChoice3_1,
             selfHarmQuestionChoice4,selfHarmQuestionChoice5,selfHarmQuestionChoice6,
-            selfHarmQuestionChoice7,selfHarmQuestionChoice8} = this.state;
+            selfHarmQuestionChoice7,selfHarmQuestionChoice8,trigger, loading, result} = this.state;
+
+        if(score == 0){
 
 
-    return (
+            return (
+                <View>
+                  <Text> คะแนนที่คุณได้คือ {score}{word}</Text>
 
-            <Text> คะแนนที่คุณได้คือ {score}{word}</Text>
-    );
+                        <Button title="ดำเนินการต่อ"
+                          onPress={() => this.Score0()}
+                        />
+
+                </View>
+              );
+            }else if(score > 0 && score < 2 ){
+              return (
+                  <View>
+                    <Text> คะแนนที่คุณได้คือ {score}{word}</Text>
+                    <Button title="ดำเนินการต่อ"
+                      onPress={() => this.Score0()}
+                    />
+
+
+                  </View>
+                );
+            }else {
+              return (
+                  <View>
+                    <Text> {score}{word}</Text>
+                    <Button title="ดำเนินการต่อ"
+                      onPress={() => this.triggetNext()}
+                    />
+
+
+
+                  </View>
+                );
+
+            }
+
+
+
   }
 }
 
 
 ShowResult.propTypes = {
   steps: PropTypes.object,
+  triggerNextStep: PropTypes.func,
 };
 
 ShowResult.defaultProps = {
   steps: undefined,
+  triggerNextStep: undefined,
 };
 
 
@@ -166,19 +279,67 @@ class Let_talk extends React.Component {
   SelfHarm_Danger = () => {
       this.props.navigation.navigate('SelfHarm_Danger');
   };
+  Need_help = () => {
+      this.props.navigation.navigate('Need_help');
+  };
   Q9 = () => {
       this.props.navigation.navigate('Q9');
   };
 
+
+
+
     render() {
         return (
           <ChatBot
+          botDelay={10}
+          userDelay={10}
           handleEnd={this.FirstOpApp}
           steps={[
+
             {
               id: 'start',
-              message: 'ฉันตรวจสอบคำที่คุณต้องการความช่วยเหลือ หรือจะเป็นอันตรายต่อคุณ คุณต้องเข้ารับการประเมินเบื้องต้น ใช้เวลาแค่ 2 นาที และจะเป็นประโยชน์ต่อตัวคุณมากๆเลยนะ 🙂',
+              message: 'การุตรวจพบคำที่คุณต้องการความช่วยเหลือ หรือจะเป็นอันตรายต่อคุณ',
+              trigger: 'start1',
+            },
+            {
+              id: 'start1',
+              component:(<Start/>),
+              asMessage:true,
+
+              trigger: 'ChoiceStart',
+            },
+
+            {
+              id: 'ChoiceStart',
+              options: [
+                {value:'ต้องการเข้ารับการประเมิน', label: 'ต้องการเข้ารับการประเมิน', trigger: 'startselfHarm' },
+                {value:'ไม่ต้องการเข้ารับการประเมิน', label: 'ไม่ต้องการเข้ารับการประเมิน', end:true },
+                {value:'ขอความช่วยเหลือ', label: 'ขอความช่วยเหลือ', trigger: 'NeedHelp' },
+              ],
+            },
+            {
+              id: 'startselfHarm',
+              message: 'โอเคจ้า งั้นเรามาเริ่มเปิดใจคุยกันเลยดีกว่า',
+              trigger: 'stickerSelfHarm',
+            },
+            {
+              id: 'stickerSelfHarm',
+              component: (  <Text>
+                <Image style={{ width: 90,height: 100,}} source={require('../assets/garoo/1.png')}/>
+                 {'\n'}
+                 {'\n'}
+                 {'\n'}
+                </Text>
+              ),
+              asMessage:true,
               trigger: 'selfHarmQuestion1',
+            },
+
+            {
+              id: 'NeedHelp',
+              component: (<Button title="กดปุ่มนี้เพื่อไปหน้าขอความช่วยเหลือ" onPress={this.Need_help}/>),
+
             },
 
               {
@@ -296,8 +457,17 @@ class Let_talk extends React.Component {
                             {
                               id: 'intheend',
                             component: (<ShowResult />),
+                            waitAction: true,
                             trigger: 'endtest'
                             },
+                            {
+                              id: 'Score0',
+                                options: [
+                                  {value:'ขอบคุณจ้า น้องการุ!', label: 'ขอบคุณจ้า น้องการุ!', end: true },
+                                  {value:'ขอบใจจ้า น้องการุ!', label: 'ขอบใจจ้า น้องการุ!',end: true},
+                                  {value:'😅', label: '😅',end: true}
+                                ],
+                              },
                             {
                               id: 'endtest',
                                 options: [

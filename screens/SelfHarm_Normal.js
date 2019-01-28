@@ -173,8 +173,8 @@ export default class SelfHarm_Normal extends React.Component {
                     {
                       id: 'cbtlast',
                         options: [
-                          { value:'ขอบคุณนะ น้องการุ', label: 'ขอบคุณนะ น้องการุ', trigger: 'cbt11' },
-                          { value:'ฉันจะพยายาม น้องการุ', label: 'ฉันจะพยายาม น้องการุ', trigger: 'cbt11' },
+                          { value:'ขอบคุณนะ น้องการุ', label: 'ขอบคุณนะ น้องการุ', trigger: 'HowWasIt' },
+                          { value:'ฉันจะพยายาม น้องการุ', label: 'ฉันจะพยายาม น้องการุ', trigger: 'HowWasIt' },
                         ],
                       },
                       {

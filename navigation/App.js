@@ -23,6 +23,73 @@ import {
 
 import PropTypes from 'prop-types';
 
+class ShareImage extends React.Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      askName: '',
+    };
+  }
+
+  componentWillMount() {
+    const { steps } = this.props;
+    const { askName } = steps;
+
+    this.setState({ askName });
+  }
+
+  render() {
+    const { askName } = this.state;
+    return (
+      <Text> การุหวังว่า{askName.value}จะโชคดีกว่าผู้ชายคนนี้นะ✏️ </Text>
+
+    );
+  }
+}
+
+ShareImage.propTypes = {
+  steps: PropTypes.object,
+};
+
+ShareImage.defaultProps = {
+  steps: undefined,
+};
+
+class Doing extends React.Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      askName: '',
+    };
+  }
+
+  componentWillMount() {
+    const { steps } = this.props;
+    const { askName } = steps;
+
+    this.setState({ askName });
+  }
+
+  render() {
+
+    return (
+      <Text> ตอนนี้คุณ{askName.value}กำลังทำอะไรอยู่(นอกจากกำลังคุยกับฉัน)✏️ </Text>
+
+    );
+  }
+}
+
+Doing.propTypes = {
+  steps: PropTypes.object,
+};
+
+Doing.defaultProps = {
+  steps: undefined,
+};
+
+
 class ShowResult extends React.Component {
     static navigationOptions = {
         title: 'ShowResult',
@@ -139,6 +206,7 @@ ShowResult.defaultProps = {
 
 class App extends React.Component {
 
+
   static navigationOptions = {
       title: 'GarooBot',
   };
@@ -163,22 +231,17 @@ class App extends React.Component {
       this.props.navigation.navigate('FirstOpApp');
   };
 
+  Name = async (value) => {
+    try {
+      await AsyncStorage.setItem("Name", value);
 
-
-  constructor(props) {
-  super(props);
-
-  this.state = {
-    askName: '',
-    userAnswer: '',
-
+    } catch (error) {
+      // Error saving data
+    }
   };
 
-}
 
   render() {
-
-
     return (
 
        <ChatBot
@@ -187,33 +250,70 @@ class App extends React.Component {
               steps={[
 
                 {
+                  id: 'first',
+                  message: 'สวัสดีจร้า',
+                  trigger: 'firststicker',
+                },
+
+                {
+                  id: 'firststicker',
+                  component: (
+            <Text>
+            <Image style={{ width: 90,height: 100,}} source={require('../assets/garoo/6.png')}/>
+             {'\n'}
+             {'\n'}
+             {'\n'}
+            </Text>
+
+          ),
+                  asMessage:true,
+                  trigger: '1',
+                },
+
+                {
                   id: '1',
-                  message: 'สวัสดีจ้า ฉันชื่อว่า Garoo , แล้วคุณล่ะชื่ออะไร?',
+                  message: 'ฉันชื่อว่า Garoo , แล้วคุณล่ะชื่ออะไร?',
                   trigger: 'askName',
                 },
                 {
                 id: 'askName',
-                  user: true,
+                user: true,
+                validator: (value) => {
+                if (value == '') {
+                return 'กรุณาป้อนชื่อของคุณ';
+              }else{
+                this.Name(value);
+
+                return true;
+              }
+
+                },
                   trigger: 'userName',
                 },
                 {
                   id: 'userName',
-                  message: 'ยินดีที่ได้รู้จัก {previousValue}!',
+                  message: 'ยินดีที่ได้รู้จักจ้า {previousValue}!',
                   trigger: 'introduce' ,
                 },
 
                 {
                   id: 'introduce',
-                  message: 'ฉันคือหุ่นยนต์ตัวน้อยๆ ที่ถูกสร้างขึ้นมาเพื่อปฎิบัติภารกิจอันยิ่งใหญ่ที่ได้รับมอบหมายมาจากผู้สร้าง',
+                  message: 'ฉันคือจิ้งโจ้ตัวน้อยๆ ที่ถูกสร้างขึ้นมาเพื่อปฎิบัติภารกิจอันยิ่งใหญ่ที่ได้รับมอบหมายมาจากผู้สร้าง',
                   trigger: 'introduceChoice',
                   },
                   {
                     id: 'introduceChoice',
                     options: [
                       { value:'ภารกิจที่ว่านั้นคืออะไรเหรอ?', label: 'ภารกิจที่ว่านั้นคืออะไรเหรอ?', trigger: '2' },
-
+                      { value:'😊', label: '😊', trigger: 'heartbeat' },
+                      { value:'😭', label: '😭', trigger: 'heartbeat' },
                     ]
                   },
+                  {
+                    id: 'heartbeat',
+                    message: '❤️',
+                    trigger: 'start',
+                    },
                   {
                   id: '2',
                   message: 'นั่นก็คือไตหาหัวจาม "ตามหาหัวใจ" คุณยังไงล่ะ เมื่อตามหาเจอแล้ว น้องการุ สัญญาว่าจะดูแลใจคุณอย่างดี ❤️',
@@ -252,13 +352,22 @@ class App extends React.Component {
                 },
                 {
                   id: 'heart',
-                  options: [
-                    { value:'emoji_1', label: '❤️', trigger: 'doing' },
-                  ],
+                  component: (
+                  <Text>
+                  <Image style={{ width: 90,height: 100,}} source={require('../assets/garoo/4.png')}/>
+                  {'\n'}
+                  {'\n'}
+                  {'\n'}
+                  </Text>
+
+                  ),
+                  asMessage:true,
+                  trigger: 'doing',
                 },
                 {
                   id: 'doing',
-                  message: 'ตอนนี้คุณ กำลังทำอะไรอยู่(นอกจากกำลังคุยกับฉัน)',
+                  component: (<Doing/>),
+                  asMessage:true,
                   trigger: 'userAnswer',
                 },
                 {
@@ -276,62 +385,24 @@ class App extends React.Component {
                   trigger: 'mood',
 
                 },
-
                 {
                   id: 'mood',
-                  message: 'แล้วอารมณ์ของคุณตอนนี้เป็นอย่างไร',
-                  trigger: 'moodChoice',
+                  component:(<Image style={{ width: '100%'}} source={require('../assets/garoo/ShareImage.gif')}/>),
+                  trigger: 'ShareImage',
                 },
                 {
-                  id: 'moodChoice',
+                  id: 'ShareImage',
+                  component:(<ShareImage/>),
+                  trigger: 'reaction',
+                },
+                {
+                  id: 'reaction',
                   options: [
-                    {value:'ดีมาก', label: 'ดีมาก', trigger: 'veryGood' },
-                    {value:'ดี', label: 'ดี', trigger: 'Good' },
-                    {value:'เฉยๆ', label: 'เฉยๆ', trigger: 'notBothered' },
-                    {value:'ไม่ค่อยดี', label: 'ไม่ค่อยดี', trigger: 'quiteBad' },
-                    {value:'แย่มาก', label: 'แย่มาก', trigger: 'bad' },
-                  ],
-                },
-                {
-                  id: 'veryGood',
-                  message: 'ว้าว! ฉันอยากให้คุณแชร์ให้ฉันรู้หน่อยว่า ทำไมตอนนี้คุณถึงรู้สึกดี',
-                  trigger: 'shareMood',
-                },
-                {
-                  id: 'Good',
-                  message: 'ว้าว! ฉันอยากให้คุณแชร์ให้ฉันรู้หน่อยว่า ทำไมตอนนี้คุณถึงรู้สึกดี',
-                  trigger: 'shareMood',
-                },
-                {
-                  id: 'notBothered',
-                  message: 'งั้นเหรอ ฉันอยากให้คุณแชร์ให้ฉันรู้หน่อยว่าทำไม ตอนนี้คุณถึงรู้สึกเฉยๆ',
-                  trigger: 'shareMood',
-                },
-                {
-                  id: 'quiteBad',
-                  message: 'ฉันพร้อมที่จะอยู่เคียงข้างเธอเสมอนะ! แชร์ให้ฉันรู้หน่อยว่าทำไมตอนนี้คุณถึงรู้สึกแย่ ✏️',
-                  trigger: 'shareMood',
-                },
-                {
-                  id: 'bad',
-                  message: 'ฉันพร้อมที่จะอยู่เคียงข้างเธอเสมอนะ! แชร์ให้ฉันรู้หน่อยว่าทำไมตอนนี้คุณถึงรู้สึกแย่ ✏️',
-                  trigger: 'shareMood',
-                },
-                {
-                  id: 'shareMood',
-                  user: true,
-                  validator: (word) => {
-        if (word.includes("ช่วยด้วย")|| word.includes("SOS") || word.includes("Help") || word.includes("ทั้งหมดเป็นความผิดของฉัน")
-        || word.includes("ผิดเอง")|| word.includes("ไม่อยากอยู่อีกต่อไป") || word.includes("อยากตาย")
-        || word.includes("จะฆ่าตัวตาย") || word.includes("ไม่ไหวแล้ว") || word.includes("อยากเจ็บปวด")
-        || word.includes("อยากทำร้ายตัวเอง")  == true) {
-          this.props.navigation.navigate('Let_talk');
-        }
-        return true;
-      },
-                  trigger: 'HowYouFeel',
-                },
+                    { value:'🤣', label: '🤣', trigger: 'HowYouFeel' },
+                    { value:'😑่', label: '😑่', trigger: 'HowYouFeel' },
+                  ]
 
+                },
 
 
                 {
@@ -504,10 +575,10 @@ class App extends React.Component {
                   {
                   id: 'questionCBTchoice',
                     options: [
-                      {value:'ฉันจะพยายามทำให้ดีที่สุด',  label: 'ฉันจะพยายามทำให้ดีที่สุด', trigger: 'selfHarmStart' },
-                      {value:'ฉันทำไม่ได้แน่ๆ',  label: 'ฉันทำไม่ได้แน่ๆ', trigger: 'Good' },
-                      {value:'ฉันทำได้ในบางครั้ง',  label: 'ฉันทำได้ในบางครั้ง', trigger: 'Good' },
-                      {value:'ฉันทำได้ในบางครั้ง',  label: 'ฉันทำได้ในบางครั้ง', trigger: 'Good' },
+                      {value:'ฉันจะพยายามทำให้ดีที่สุด',  label: 'ฉันจะพยายามทำให้ดีที่สุด', trigger: 'RightAnswer' },
+                      {value:'ฉันทำไม่ได้แน่ๆ',  label: 'ฉันทำไม่ได้แน่ๆ', trigger: 'WrongAnswer' },
+                      {value:'ฉันทำได้ในบางครั้ง',  label: 'ฉันทำได้ในบางครั้ง', trigger: 'WrongAnswer' },
+                      {value:'ฉันทำได้ในบางครั้ง',  label: 'ฉันทำได้ในบางครั้ง', trigger: 'WrongAnswer' },
                     ],
                   },
                   {
@@ -756,23 +827,25 @@ class App extends React.Component {
                                   // Deep-Mind analytic
                                   {
                                     id: 'HowYouFeel',
-                                    message: 'ตอนนี้คุณรู้สึกอย่างไร' ,
+                                    message: 'ตอนนี้คุณรู้สึกอย่างไร?' ,
                                     trigger: 'HowYouFeelChoice',
                                   },
                                   {
                                     id: 'HowYouFeelChoice',
                                     options: [
-                                      {value:'ดี', label: 'ดี', trigger: 'FeelGood' },
-                                      {value:'มีความสุข', label: 'มีความสุข', trigger: 'FeelGood' },
-                                      {value:'โล่งอก', label: 'โล่งอก', trigger: 'FeelGood' },
-                                      {value:'เหนื่อย', label: 'เหนื่อย', trigger: 'Feelsad' },
-                                      {value:'นอนไม่หลับ', label: 'นอนไม่หลับ', trigger: 'HowToSleep' },
-                                      {value:'ป่วย', label: 'ป่วย', trigger: 'FeelSick' },
-                                      {value:'เครียด', label: 'เครียด', trigger: 'FeelTired' },
-                                      {value:'ซึมเศร้า', label: 'ซึมเศร้า', trigger: 'FeelTired' },
-                                      {value:'วิตกกังวล', label: 'วิตกกังวล', trigger: 'FeelTired' },
-                                      {value:'โกรธ', label: 'โกรธ', trigger: 'FeelAngry' },
-                                      {value:'เหงา', label: 'เหงา', trigger: 'FeelLonely' },
+                                      {value:'ดี', label: 'ดี😃', trigger: 'FeelGood' },
+                                      {value:'มีความสุข', label: 'มีความสุข😀', trigger: 'FeelGood' },
+                                      {value:'โล่งอก', label: 'โล่งอก😅', trigger: 'FeelGood' },
+                                      {value:'เหนื่อย', label: 'เหนื่อย😴', trigger: 'Feelsad' },
+                                      {value:'นอนไม่หลับ', label: 'นอนไม่หลับ😵', trigger: 'HowToSleep' },
+                                      {value:'ป่วย', label: 'ป่วย🤒', trigger: 'FeelSick' },
+                                      {value:'เครียด', label: 'เครียด😤', trigger: 'FeelTired' },
+                                      {value:'ซึมเศร้า', label: 'ซึมเศร้า😞', trigger: 'FeelTired' },
+                                      {value:'วิตกกังวล', label: 'วิตกกังวล😱', trigger: 'FeelTired' },
+                                      {value:'โกรธ', label: 'โกรธ😡', trigger: 'FeelAngry' },
+                                      {value:'เหงา', label: 'เหงา😢', trigger: 'FeelLonely' },
+                                      {value:'เฉยๆ', label: 'เฉยๆ😐', trigger: 'FeelLonely' },
+                                      {value:'อื่นๆ', label: 'อื่นๆนอกเหนือจากนี้', trigger: 'FeelLonely' },
                                     ],
                                   },
                                   {
