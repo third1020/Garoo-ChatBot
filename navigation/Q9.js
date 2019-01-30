@@ -37,6 +37,28 @@ class ShowResult extends React.Component {
     };
 
 
+    Score0() {
+      this.setState({ trigger: true }, () => {
+
+        this.props.triggerNextStep({value:"Score0",trigger:'Score0'});
+      });
+    }
+
+    Score7_18() {
+      this.setState({ trigger: true }, () => {
+
+        this.props.triggerNextStep({value:"Score7_18",trigger:'Score7_18'});
+      });
+    }
+
+    Score18Upper() {
+      this.setState({ trigger: true }, () => {
+
+        this.props.triggerNextStep({value:"Score18Upper",trigger:'Score18Upper'});
+      });
+    }
+
+
 
     constructor(props) {
     super(props);
@@ -51,6 +73,7 @@ class ShowResult extends React.Component {
       selfHarmQuestionChoice2: '',
       selfHarmQuestionChoice3: '',
       selfHarmQuestionChoice3_1: '',
+      selfHarmQuestionChoice3_2:'',
       selfHarmQuestionChoice4: '',
       selfHarmQuestionChoice5: '',
       selfHarmQuestionChoice6: '',
@@ -65,38 +88,44 @@ class ShowResult extends React.Component {
 
 
     const { selfHarmQuestionChoice,selfHarmQuestionChoice2,
-            selfHarmQuestionChoice3,selfHarmQuestionChoice3_1,
+            selfHarmQuestionChoice3,selfHarmQuestionChoice3_1,selfHarmQuestionChoice3_2,
             selfHarmQuestionChoice4,selfHarmQuestionChoice5,selfHarmQuestionChoice6
             } = steps;
 
     this.setState({ selfHarmQuestionChoice,selfHarmQuestionChoice2,
-            selfHarmQuestionChoice3,selfHarmQuestionChoice3_1,
+            selfHarmQuestionChoice3,selfHarmQuestionChoice3_1,selfHarmQuestionChoice3_2,
             selfHarmQuestionChoice4,selfHarmQuestionChoice5,selfHarmQuestionChoice6
             });
 
 
                       score = selfHarmQuestionChoice.value+selfHarmQuestionChoice2.value+selfHarmQuestionChoice3.value
                               +selfHarmQuestionChoice4.value+selfHarmQuestionChoice5.value+selfHarmQuestionChoice3_1.value
-                              +selfHarmQuestionChoice6.value;
+                              +selfHarmQuestionChoice3_2.value+selfHarmQuestionChoice6.value;
+
 
 
 
 
                     if (score >= 0 && score < 7 ) {word =" จากการประเมินเบื้องต้นเราพบว่าคุณเป็นปกติ ไม่มีความเสี่ยงในภาวะซึมเศร้า"
+                                                   ,advice="ควรดูแลสุขภาพจิตใจให้ดีแบบนี้ไปตลอด"
+
 
                                                      }//score =1-2
 
                     else if (score > 6 && score < 13 ) {word =" จากการประเมินเบื้องต้นเราพบว่าคุณมีภาวะ ซึมเศร้าเล็กน้อย"
+                                                       ,advice="ควรได้รับกำรปรึกษาหรือการบำบัดรักษาทางจิตเวช"
                                                        // ,help="ฉันต้องกำรควำมช่วยเหลือ",
                                                        // nohelp="ฉันยังไม่ต้องกำรควำมช่วยเหลือ"
                                                      }//score =3-4
 
                     else if (score > 12 && score < 19) {word =" จากการประเมินเบื้องต้นเราพบว่าคุณมีสภาวะซึมเศร้าสูง"
+                                                        ,advice="ต้องได้รับการปรึกษาและการบำบัดรักษาทางจิตเวช"
                                                                                         // ,help="ฉันต้องกำรควำมช่วยเหลือ",
                                                                                         // nohelp="ฉันยังไม่ต้องกำรควำมช่วยเหลือ"
                                                        }//score =5-9
 
                    else if (score >18 && score < 28) {word =" จากการประเมินเบื้องต้นเราพบว่าคุณมีภาวะซึมรุนแรง"
+                                                      ,advice="ต้องได้รับการบำบัดรักษาทางจิตเวชอย่างเร่งด่วน"
                                                                                         // ,help="ฉันต้องกำรควำมช่วยเหลืออย่างเร่งด่วน",
                                                                                         // nohelp="ฉันต้องกำรควำมช่วยเหลือ"
                                                       }//score =10-16
@@ -112,14 +141,54 @@ class ShowResult extends React.Component {
             selfHarmQuestionChoice4,selfHarmQuestionChoice5,selfHarmQuestionChoice6
             } = this.state;
 
+   if(score >= 0 && score < 7){
+     return (
+           <View>
+           <Text> คะแนนที่คุณได้คือ {score}{word} {'\n'}
+                  คำแนะนำ :{advice}</Text>
+                  <Button title="ดำเนินการต่อ" onPress={() =>this.Score0()} />
 
-    return (
-            <View>
-            <Text> คะแนนที่คุณได้คือ {score}{word}</Text>
+           </View>
+   );
+ } else if(score > 6 && score < 13){
+   return (
+         <View>
+         <Text> คะแนนที่คุณได้คือ {score}{word} {'\n'}
+                คำแนะนำ :{advice}</Text>
+                <Button title="ดำเนินการต่อ" onPress={() =>this.Score7_18()} />
 
-            </View>
+         </View>
+ );
 
-    );
+}else if(score > 12 && score < 19){
+   return (
+         <View>
+         <Text> คะแนนที่คุณได้คือ {score}{word} {'\n'}
+                คำแนะนำ :{advice}</Text>
+                <Button title="ดำเนินการต่อ" onPress={() =>this.Score7_18()} />
+
+         </View>
+ );
+
+ }else if(score > 18 && score < 28){
+   return (
+         <View>
+         <Text> คะแนนที่คุณได้คือ {score}{word} {'\n'}
+                คำแนะนำ :{advice}</Text>
+                <Button title="ดำเนินการต่อ" onPress={() =>this.Score18Upper()} />
+
+         </View>
+ );
+
+}else{
+  return(
+        <View>
+        <Text> Error</Text>
+
+        </View>
+);
+}
+
   }
 }
 
@@ -160,6 +229,18 @@ onPress={() => navigation.navigate('FirstOpApp')} />
   HomeScreen = () => {
       this.props.navigation.navigate('HomeScreen');
   };
+  FirstOpApp = () => {
+      this.props.navigation.navigate('FirstOpApp');
+  };
+
+  Thing = () => {
+      this.props.navigation.navigate('Thing');
+  };
+
+  Behavior = () => {
+      this.props.navigation.navigate('Behavior');
+  };
+
 
 
 
@@ -177,7 +258,7 @@ onPress={() => navigation.navigate('FirstOpApp')} />
               steps={[
                 {
                   id: 'StartQ9',
-                  message: 'โอวเคจ้า งั้นมาเริ่มกันเลย(ส่งรูป garoo ตรวจ)',
+                  message: 'โอวเคจ้า งั้นมาเริ่มกันเลย',
                   trigger: 'StartQ9sticker',
                 },
 
@@ -214,6 +295,11 @@ onPress={() => navigation.navigate('FirstOpApp')} />
                   id: 'selfHarmQuestion3_1',
                   message: 'ในช่วง 2 สัปดาห์ที่ผ่านมาจนถึงวันนี้ คุณรู้สึกเหนื่อยง่าย ไม่ค่อยมีเรี่ยวแรง บ้างหรือไม่?',
                   trigger: 'selfHarmQuestionChoice3_1',
+                },
+                {
+                  id: 'selfHarmQuestion3_2',
+                  message: 'ในช่วง 2 สัปดาห์ที่ผ่านมาจนถึงวันนี้ คุณมีอาการเบื่ออาหาร หรือ กินจุมากกว่าปกติ บ้างหรือไม่?',
+                  trigger: 'selfHarmQuestionChoice3_2',
                 },
 
                 {
@@ -261,15 +347,25 @@ onPress={() => navigation.navigate('FirstOpApp')} />
                       ],
                     },
 
+
                     {
                       id: 'selfHarmQuestionChoice3_1',
                         options: [
-                          { value:0, label: 'ไม่เลย', trigger: 'selfHarmQuestion4' },
-                          { value:1, label: 'เป็นบางวัน (1-7 วัน)', trigger: 'selfHarmQuestion4' },
-                          { value:2, label: 'เป็นบ่อยๆ (มากกว่า7วัน)', trigger: 'selfHarmQuestion4' },
-                          { value:3, label: 'เป็นแทบทุกวัน', trigger: 'selfHarmQuestion4' },
+                          { value:0, label: 'ไม่เลย', trigger: 'selfHarmQuestion3_2' },
+                          { value:1, label: 'เป็นบางวัน (1-7 วัน)', trigger: 'selfHarmQuestion3_2' },
+                          { value:2, label: 'เป็นบ่อยๆ (มากกว่า7วัน)', trigger: 'selfHarmQuestion3_2' },
+                          { value:3, label: 'เป็นแทบทุกวัน', trigger: 'selfHarmQuestion3_2' },
                         ],
                       },
+                      {
+                        id: 'selfHarmQuestionChoice3_2',
+                          options: [
+                            { value:0, label: 'ไม่เลย', trigger: 'selfHarmQuestion4' },
+                            { value:1, label: 'เป็นบางวัน (1-7 วัน)', trigger: 'selfHarmQuestion4' },
+                            { value:2, label: 'เป็นบ่อยๆ (มากกว่า7วัน)', trigger: 'selfHarmQuestion4' },
+                            { value:3, label: 'เป็นแทบทุกวัน', trigger: 'selfHarmQuestion4' },
+                          ],
+                        },
 
                     {
                       id: 'selfHarmQuestionChoice4',
@@ -303,7 +399,8 @@ onPress={() => navigation.navigate('FirstOpApp')} />
                               {
                                 id: 'result',
                               component: (<ShowResult />),
-                              trigger : 'Choice',
+                              waitAction: true,
+
                               },
 
                               {
@@ -317,6 +414,24 @@ onPress={() => navigation.navigate('FirstOpApp')} />
                                 {
                                   id: 'need_help',
                                 component: (<Button title="กดปุ่มนี้เพื่อรับความช่วยเหลือ" onPress={this.SelfHarm_Normal}/>),
+
+                                },
+
+                                {
+                                  id: 'Score0',
+                                component: (<Button title="กดปุ่มนี้เพื่อกลับหน้าหลัก" onPress={this.FirstOpApp}/>),
+
+                                },
+
+                                {
+                                  id: 'Score7_18',
+                                component: (<Button title="กดปุ่มนี้เพื่อรับการบัดบำรักษา" onPress={this.Thing}/>),
+
+                                },
+
+                                {
+                                  id: 'Score18Upper',
+                                component: (<Button title="กดปุ่มนี้เพื่อรับการบำบัดรักษาอย่างเร่งด่วน" onPress={this.Behavior}/>),
 
                                 },
 
