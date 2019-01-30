@@ -74,6 +74,9 @@ export default class FirstOpApp extends React.Component {
     _AddData = () => {
         this.props.navigation.navigate('Add');
     };
+    Profile = () => {
+        this.props.navigation.navigate('Profile');
+    };
 
 
 
@@ -109,10 +112,10 @@ export default class FirstOpApp extends React.Component {
         return(
           <View style={styles.container}>
           <Image style={styles.stretch1}
-          source={require('../assets/garoo/4.png')}/>
+          source={require('../assets/garoo/6.png')}/>
       <View style={styles.row}>
 
-        <TouchableOpacity onPress={this.Website} style={styles.item}>
+        <TouchableOpacity onPress={this.Profile} style={styles.item}>
           <Image resizeMode="contain" source={profileIcon} style={styles.itemImage} />
           <Text style={styles.itemText}>Profile</Text>
         </TouchableOpacity>
@@ -144,8 +147,9 @@ const styles = StyleSheet.create({
     flex: 1
   },
   stretch1: {
-    backgroundColor: '#DDDDDD',
-    padding: 100,
+
+    alignItems:'center',
+    padding: 80,
     width,
     height,
     flex: 1

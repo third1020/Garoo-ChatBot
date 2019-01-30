@@ -20,7 +20,7 @@ import {
     createBottomTabNavigator,
 } from 'react-navigation';
 
-import { Entypo as Icon } from '@expo/vector-icons';
+import { Icon } from 'react-native-elements'
 import { Colors, Fonts } from '../constants';
 
 
@@ -53,9 +53,18 @@ const { height,width } = Dimensions.get('window')
 
 
 export default class Chats extends React.Component {
-  static navigationOptions = {
-      title: 'Chats',
+  static navigationOptions = ({ navigation }) => {
+    return {
+      title: "Chat",
+      headerRight: (
+        <Icon
+raised
+name='home'
+color='#00aaff'
+onPress={() => navigation.navigate('FirstOpApp')} />
+                   )
 
+    };
   };
 
   App = () => {
@@ -76,6 +85,10 @@ export default class Chats extends React.Component {
         this.props.navigation.navigate('SelectImage');
     };
 
+    Deep_mind = () => {
+        this.props.navigation.navigate('Deep_mind');
+    };
+
   GoApp = async () => {
     try {
       await AsyncStorage.setItem("@onBoardingPageLoad:key", "Another");
@@ -93,10 +106,10 @@ export default class Chats extends React.Component {
         return (
           <View style={styles.container}>
           <Image style={styles.stretch1}
-          source={require('../assets/garoo/0001.png')}/>
+          source={require('../assets/garoo/Diagnose.png')}/>
       <View style={styles.row}>
 
-        <TouchableOpacity onPress={this.Let_talk} style={styles.item}>
+        <TouchableOpacity onPress={this.Deep_mind} style={styles.item}>
           <Image resizeMode="contain" source={chatIcon} style={styles.itemImage} />
           <Text style={styles.itemText}>พูดคุยกับฉัน</Text>
         </TouchableOpacity>
@@ -137,7 +150,7 @@ const styles = StyleSheet.create({
     flex: 1
   },
   stretch1: {
-    backgroundColor: '#DDDDDD',
+
     padding: 100,
     width,
     height,

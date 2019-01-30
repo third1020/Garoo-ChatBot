@@ -22,15 +22,26 @@ import SelectImage from '../AbilityBot/SelectImage';
 import ChatBot from 'react-native-chatbot';
 import { Button } from 'react-native-elements';
 import HomeScreen from '../navigation/HomeScreen';
+import { Icon } from 'react-native-elements'
 
 
 
 
 
 export default class SelfHarm_Normal extends React.Component {
-    static navigationOptions = {
-        title: 'SelfHarm_Normal',
+  static navigationOptions = ({ navigation }) => {
+    return {
+      title: "SelfHarm_Normal",
+      headerRight: (
+        <Icon
+raised
+name='home'
+color='#00aaff'
+onPress={() => navigation.navigate('FirstOpApp')} />
+                   )
+
     };
+  };
 
     SelectImage = () => {
         this.props.navigation.navigate('SelectImage');

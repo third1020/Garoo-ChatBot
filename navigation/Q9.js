@@ -11,6 +11,7 @@ import CheckFeel from '../AbilityBot/CheckFeel';
 import CheckSick from '../AbilityBot/CheckSick';
 import PlaySound from '../AbilityBot/PlaySound';
 import { Button } from 'react-native-elements';
+import { Icon } from 'react-native-elements'
 
 
 import {
@@ -132,9 +133,18 @@ ShowResult.defaultProps = {
 };
 
 class Q9 extends React.Component {
+  static navigationOptions = ({ navigation }) => {
+    return {
+      title: "9Q",
+      headerRight: (
+        <Icon
+raised
+name='home'
+color='#00aaff'
+onPress={() => navigation.navigate('FirstOpApp')} />
+                   )
 
-  static navigationOptions = {
-      title: 'Q9',
+    };
   };
 
 
@@ -168,6 +178,20 @@ class Q9 extends React.Component {
                 {
                   id: 'StartQ9',
                   message: 'โอวเคจ้า งั้นมาเริ่มกันเลย(ส่งรูป garoo ตรวจ)',
+                  trigger: 'StartQ9sticker',
+                },
+
+                {
+                  id: 'StartQ9sticker',
+                  component: (
+                    <Text>
+                    <Image style={{ width: 90,height: 100,}} source={require('../assets/garoo/Diagnose.png')}/>
+                    {'\n'}
+                    {'\n'}
+                    {'\n'}
+                    </Text>
+                  ),
+                  asMessage: true,
                   trigger: 'selfHarmQuestion1',
                 },
 

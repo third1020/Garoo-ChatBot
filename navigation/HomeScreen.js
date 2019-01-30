@@ -30,6 +30,7 @@ import App from './App';
 import Q9 from './Q9';
 import Chats from './Chats';
 import FirstOpApp from './FirstOpApp';
+import Profile from './Profile';
 
 import SelfHarm_Danger from '../screens/SelfHarm_Danger';
 import SelfHarm_NoNeed from '../screens/SelfHarm_NoNeed';
@@ -39,6 +40,10 @@ import SelfHarm_Normal from '../screens/SelfHarm_Normal';
 import Check_me from '../screens/Check_me';
 import Let_talk from '../screens/Let_talk';
 import Need_help from '../screens/Need_help';
+import Thing from '../screens/Thing';
+import Behavior from '../screens/Behavior';
+import Deep_mind from '../screens/Deep_mind';
+
 import SelectImage from '../AbilityBot/SelectImage';
 import ShowActivity from '../AbilityBot/ShowActivity';
 import { Header } from 'react-native-elements'
@@ -108,6 +113,20 @@ class HomeScreen extends React.Component {
     Website = ()=>{ Linking.openURL('http://www.hospital.tu.ac.th/');
     };
 
+    Profile = () => {
+        this.props.navigation.navigate('Profile');
+    };
+    Behavior = () => {
+        this.props.navigation.navigate('Behavior');
+    };
+    Thing = () => {
+        this.props.navigation.navigate('Thing');
+    };
+
+
+
+
+
     constructor(props) {
     super(props);
     this.state={
@@ -168,7 +187,7 @@ class HomeScreen extends React.Component {
           source={require('../assets/garoo/0001.png')}/>
       <View style={styles.row}>
 
-        <TouchableOpacity onPress={this.SelectImage} style={styles.item}>
+        <TouchableOpacity onPress={this.Profile} style={styles.item}>
           <Image resizeMode="contain" source={profileIcon} style={styles.itemImage} />
           <Text style={styles.itemText}>Profile</Text>
         </TouchableOpacity>
@@ -238,10 +257,14 @@ const AppStack = createStackNavigator({   HomeScreen : HomeScreen,
                                           SelfHarm_Danger: SelfHarm_Danger ,
                                           SelfHarm_NoNeed: SelfHarm_NoNeed,
                                           SelfHarm_Normal: SelfHarm_Normal,
+                                          Behavior:Behavior,
+                                          Thing:Thing,
+                                          Deep_mind:Deep_mind,
 
                                           Check_me: Check_me,
                                           Let_talk: Let_talk,
                                           Need_help: Need_help,
+                                          Profile: Profile,
                                         });
 
 

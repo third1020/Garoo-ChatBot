@@ -16,12 +16,22 @@ import {
 } from 'react-navigation';
 import Add from '../navigation/Add';
 import ChatBot from 'react-native-chatbot';
+import { Icon } from 'react-native-elements'
 
 export default class SelfHarm_NoNeed extends React.Component {
-    static navigationOptions = {
-        title: 'SelfHarm_NoNeed',
-    };
+  static navigationOptions = ({ navigation }) => {
+    return {
+      title: "SelfHarm_NoNeed",
+      headerRight: (
+        <Icon
+raised
+name='home'
+color='#00aaff'
+onPress={() => navigation.navigate('FirstOpApp')} />
+                   )
 
+    };
+  };
     FirstOpApp = () => {
       this.props.navigation.navigate('FirstOpApp');
   };

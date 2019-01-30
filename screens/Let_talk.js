@@ -33,6 +33,16 @@ import SelfHarm_NoNeed from './SelfHarm_NoNeed';
 import SelfHarm_Danger from './SelfHarm_Danger';
 
 import PropTypes from 'prop-types';
+import { Icon } from 'react-native-elements'
+
+// const RootStack = createStackNavigator(
+//   {
+//     Home: HomeScreen,
+//   },
+//   {
+//     initialRouteName: 'Home',
+//   }
+// );
 
 class Start extends React.Component {
   constructor(props) {
@@ -80,7 +90,8 @@ class ShowResult extends React.Component {
     static navigationOptions = {
         title: 'ShowResult',
     };
-    FirstOpApp = () => {
+
+    FirstOpApp() {
         this.props.navigation.navigate('FirstOpApp');
     };
     Score = async (value) => {
@@ -97,12 +108,27 @@ class ShowResult extends React.Component {
         this.props.triggerNextStep({value:"Score0",trigger:'Score0'});
       });
     }
-    triggetNext() {
+
+    Score2_9() {
+      this.setState({ trigger: true }, () => {
+
+        this.props.triggerNextStep({value:"Score2_9",trigger:'Score2_9'});
+      });
+    }
+
+    ScoreUpper9() {
+      this.setState({ trigger: true }, () => {
+
+        this.props.triggerNextStep({value:"ScoreUpper9",trigger:'ScoreUpper9'});
+      });
+    }
+    triggerNext() {
       this.setState({ trigger: true }, () => {
 
         this.props.triggerNextStep({value:"endtest",trigger:'endtest'});
       });
     }
+
 
 
     constructor(props) {
@@ -125,8 +151,7 @@ class ShowResult extends React.Component {
       selfHarmQuestionChoice8: '',
 
     };
-    this.triggetNext = this.triggetNext.bind(this);
-    this.Score0 = this.Score0.bind(this);
+
 
   }
 
@@ -157,34 +182,40 @@ class ShowResult extends React.Component {
 
 
 
-                    if (score == 0) {word = " จากการประเมินเบื้องต้นเราพบว่าคุณไม่มีความเสี่ยงในการทำร้ายตนเองและการฆ่าตัวตาย"
+                    if (score == 0) {word = "จากการประเมินเบื้องต้นเราพบว่าคุณไม่มีความเสี่ยงในการทำร้ายตนเองและการฆ่าตัวตาย",
+                                     this.Score(word);
 
 
                                      // ,help="ขอบคุณนะ Mindbot",
                                      // nohelp="แล้วเจอกันอีกนะ Mindbot",
 
                                    } //score =0
-                    else if (score > 0 && score < 2 ) {word =" จากการประเมินเบื้องต้นเราพบว่าคุณมีความเสี่ยงในการทำร้ายตัวเองในระดับปานกลาง และความเสี่ยงในการฆ่าตัวตายในระดับน้อย"
+                    else if (score > 0 && score < 2 ) {word ="จากการประเมินเบื้องต้นเราพบว่าคุณมีความเสี่ยงในการทำร้ายตัวเองในระดับปานกลาง และความเสี่ยงในการฆ่าตัวตายในระดับน้อย",
+                                                       this.Score(word);
                                                        // ,help="ขอบคุณนะ Mindbot",
                                                        // nohelp="แล้วเจอกันอีกนะ Mindbot"
                                                      }//score =1-2
 
-                    else if (score >= 2 && score < 5 ) {word =" จากการประเมินเบื้องต้นเราพบว่าคุณมีความเสี่ยงในการทำร้ายตัวเองในระดับสูง และความเสี่ยงในการฆ่าตัวตายในระดับน้อย"
+                    else if (score >= 2 && score < 5 ) {word ="จากการประเมินเบื้องต้นเราพบว่าคุณมีความเสี่ยงในการทำร้ายตัวเองในระดับสูง และความเสี่ยงในการฆ่าตัวตายในระดับน้อย",
+                                                        this.Score(word);
                                                        // ,help="ฉันต้องกำรควำมช่วยเหลือ",
                                                        // nohelp="ฉันยังไม่ต้องกำรควำมช่วยเหลือ"
                                                      }//score =3-4
 
-                    else if (score >= 5 && score < 9) {word =" จากการประเมินเบื้องต้นเราพบว่าึถณมีความเสี่ยงในการทำร้ายตัวเองในระดับรุนแรง และความเสี่ยงในการฆ่าตัวตายในระดับน้อย"
+                    else if (score >= 5 && score < 9) {word ="จากการประเมินเบื้องต้นเราพบว่าึถณมีความเสี่ยงในการทำร้ายตัวเองในระดับรุนแรง และความเสี่ยงในการฆ่าตัวตายในระดับน้อย",
+                                                       this.Score(word);
                                                        // ,help="ฉันต้องกำรควำมช่วยเหลือ",
                                                        // nohelp="ฉันยังไม่ต้องกำรควำมช่วยเหลือ"
                                                      }//score =5-9
 
-                    else if (score >= 9 && score < 17) {word =" จากการประเมินเบื้องต้นเราพบว่าคุณมีความเสี่ยงในการทำร้ายตัวเองในระดับรุนแรง และความเสี่ยงในการฆ่าตัวตายในระดับปานกลาง"
+                    else if (score >= 9 && score < 17) {word ="จากการประเมินเบื้องต้นเราพบว่าคุณมีความเสี่ยงในการทำร้ายตัวเองในระดับรุนแรง และความเสี่ยงในการฆ่าตัวตายในระดับปานกลาง",
+                                                        this.Score(word);
                                                        // ,help="ฉันต้องกำรควำมช่วยเหลืออย่างเร่งด่วน",
                                                        // nohelp="ฉันต้องกำรควำมช่วยเหลือ"
                                                      }//score =10-16
 
-                    else if (score >= 17) { word =" จากการประเมินเบื้องต้นเราพบว่าคุณมีความเสี่ยงในการทำร้ายตัวเองในระดับรุนแรง และมีความเสี่ยงในการฆ่าตัวตายในระดับสูง"
+                    else if (score >= 17) { word ="จากการประเมินเบื้องต้นเราพบว่าคุณมีความเสี่ยงในการทำร้ายตัวเองในระดับรุนแรง และมีความเสี่ยงในการฆ่าตัวตายในระดับสูง",
+                                                   this.Score(word);
                                                        // ,help="ฉันต้องกำรควำมช่วยเหลืออย่างเร่งด่วน",
                                                        // nohelp="ฉันต้องกำรควำมช่วยเหลือ"
                                                      }//score > 16
@@ -201,46 +232,40 @@ class ShowResult extends React.Component {
             selfHarmQuestionChoice4,selfHarmQuestionChoice5,selfHarmQuestionChoice6,
             selfHarmQuestionChoice7,selfHarmQuestionChoice8,trigger, loading, result} = this.state;
 
-        if(score == 0){
-
-
-            return (
-                <View>
-                  <Text> คะแนนที่คุณได้คือ {score}{word}</Text>
-
-                        <Button title="ดำเนินการต่อ"
-                          onPress={() => this.Score0()}
-                        />
-
-                </View>
-              );
-            }else if(score > 0 && score < 2 ){
+      if(score >= 0 && score < 2 ){
               return (
                   <View>
                     <Text> คะแนนที่คุณได้คือ {score}{word}</Text>
-                    <Button title="ดำเนินการต่อ"
-                      onPress={() => this.Score0()}
+                    <Button title="ดำเนินการต่อ" onPress={() =>this.Score0()}
+
                     />
 
 
                   </View>
                 );
-            }else {
+            }else if(score > 2 && score < 9 ){
+                      return (
+                          <View>
+                            <Text> คะแนนที่คุณได้คือ {score}{word}</Text>
+                            <Button title="ดำเนินการต่อ" onPress={() =>this.Score2_9()}
+
+                            />
+
+
+                          </View>
+                        );
+                    }else{
               return (
                   <View>
-                    <Text> {score}{word}</Text>
-                    <Button title="ดำเนินการต่อ"
-                      onPress={() => this.triggetNext()}
+                    <Text> คะแนนที่คุณได้คือ {score}{word}</Text>
+                    <Button title="ดำเนินการต่อ" onPress={() =>this.ScoreUpper9()}
+
                     />
-
-
 
                   </View>
                 );
 
             }
-
-
 
   }
 }
@@ -259,9 +284,19 @@ ShowResult.defaultProps = {
 
 
 class Let_talk extends React.Component {
-    static navigationOptions = {
-        title: 'SelfHarm',
+  static navigationOptions = ({ navigation }) => {
+    return {
+      title: "SelfHarm",
+      headerRight: (
+        <Icon
+raised
+name='home'
+color='#00aaff'
+onPress={() => navigation.navigate('FirstOpApp')} />
+                   )
+
     };
+  };
 
     HomeScreen = () => {
       this.props.navigation.navigate('HomeScreen');
@@ -285,6 +320,12 @@ class Let_talk extends React.Component {
   Q9 = () => {
       this.props.navigation.navigate('Q9');
   };
+  Thing = () => {
+      this.props.navigation.navigate('Thing');
+  };
+  Behavior = () => {
+      this.props.navigation.navigate('Behavior');
+  };
 
 
 
@@ -292,8 +333,7 @@ class Let_talk extends React.Component {
     render() {
         return (
           <ChatBot
-          botDelay={10}
-          userDelay={10}
+
           handleEnd={this.FirstOpApp}
           steps={[
 
@@ -493,6 +533,19 @@ class Let_talk extends React.Component {
                                 id: 'NoNeed',
                                 component: (<Button title="กดปุ่มนี้เพื่อกลับสู่หน้าหลัก" onPress={this.FirstOpApp} />) ,
                               },
+                              {
+                                id: 'Score2_9',
+                                component: (<View>
+                                  <Button title="กดปุ่มนี้เพื่อเข้ารับการบำบัดความคิด" onPress={this.Thing} />
+
+                                </View>) ,
+                              },
+                              {
+                                id: 'ScoreUpper9',
+                                component: (<Button title="กดปุ่มนี้เพื่อเข้ารับการบำบัดพฤติกรรมและความคิด" onPress={this.Behavior} />) ,
+                              },
+
+
 
 
           ]}

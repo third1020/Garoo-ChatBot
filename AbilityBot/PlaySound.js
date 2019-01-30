@@ -129,15 +129,14 @@ export default class PlaySound extends React.Component {
 return (
   <View>
 
-  <Button title="A_Quiet_Thought" onPress={this.playSound1} />
-  <Button title="big-waves-hit-land" onPress={this.playSound2} />
+  <Button title="A quiet thought" onPress={this.playSound1} />
+  <Button title="Big wave hit land" onPress={this.playSound2} />
   <Button title="Flickering" onPress={this.playSound3} />
-  <Button title="Kiss_the_Sky" onPress={this.playSound4} />
-  <Button title="Lifting_Dreams" onPress={this.playSound5} />
-  <Button title="love you" onPress={this.playSound6} />
-  <Button title="Meditation-Sound_02-ItTiPiSo_30min" onPress={this.playSound7} />
-  <Button title="Script-AURA-Edit1+Song-B" onPress={this.playSound8} />
-  <Button title="Shattered_Paths" onPress={this.playSound9} />
+  <Button title="Kiss the sky" onPress={this.playSound4} />
+  <Button title="Lifting dreams" onPress={this.playSound5} />
+  <Button title="Love you" onPress={this.playSound6} />
+  <Button title="Script aura + Song-B" onPress={this.playSound8} />
+  <Button title="Shattered paths" onPress={this.playSound9} />
 
 
   <Button title="Stop" onPress={this.StopSound} />

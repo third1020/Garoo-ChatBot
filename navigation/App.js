@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, Text, View ,ActivityIndicator, AsyncStorage,Alert,Image} from 'react-native';
+import { StyleSheet, Text, View ,ActivityIndicator, AsyncStorage,Alert,Image,Dimensions} from 'react-native';
 import ChatBot from 'react-native-chatbot';
 import HomeScreen from './HomeScreen';
 import FirstOpApp from './FirstOpApp';
@@ -13,6 +13,7 @@ import CheckFeel from '../AbilityBot/CheckFeel';
 import CheckSick from '../AbilityBot/CheckSick';
 import PlaySound from '../AbilityBot/PlaySound';
 import { Button } from 'react-native-elements';
+import { Icon } from 'react-native-elements'
 
 
 import {
@@ -22,6 +23,8 @@ import {
 } from 'react-navigation';
 
 import PropTypes from 'prop-types';
+
+const { height,width } = Dimensions.get('window')
 
 class ShareImage extends React.Component {
   constructor(props) {
@@ -64,23 +67,30 @@ class Doing extends React.Component {
       askName: '',
     };
   }
-
-  componentWillMount() {
-    const { steps } = this.props;
-    const { askName } = steps;
-
-    this.setState({ askName });
+  getName = async () => {
+    try {
+      var name = await AsyncStorage.getItem('Name');
+          this.setState({
+            name: name
+          });
+    } catch (error) {
+      console.log(error);
+    }
   }
+  componentWillMount() {
+    this.getName();
+
+    var that = this;
+}
 
   render() {
 
     return (
-      <Text> ตอนนี้คุณ{askName.value}กำลังทำอะไรอยู่(นอกจากกำลังคุยกับฉัน)✏️ </Text>
+      <Text>ตอนนี้คุณ{this.state.name} กำลังทำอะไรอยู่(นอกจากกำลังคุยกับฉัน )✏️</Text>
 
     );
   }
 }
-
 Doing.propTypes = {
   steps: PropTypes.object,
 };
@@ -89,6 +99,92 @@ Doing.defaultProps = {
   steps: undefined,
 };
 
+class Happy extends React.Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      askName: '',
+    };
+  }
+  getName = async () => {
+    try {
+      var name = await AsyncStorage.getItem('Name');
+          this.setState({
+            name: name
+          });
+    } catch (error) {
+      console.log(error);
+    }
+  }
+  componentWillMount() {
+    this.getName();
+
+    var that = this;
+}
+
+  render() {
+
+    return (
+      <Text> ว้าว! ตอนนี้ฉันรู้สึกดีใจ และมีความสุข
+มากๆเลย ที่ {this.state.name}เองก็มีความสุข น้องการุ
+หวังว่า {this.state.name} จะแชร์ความรู้สึกดีๆ ให้น้องการุ
+รับรู้อีกนะ 😁  </Text>
+
+    );
+  }
+}
+
+Happy.propTypes = {
+  steps: PropTypes.object,
+};
+
+Happy.defaultProps = {
+  steps: undefined,
+};
+
+class Relief extends React.Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      askName: '',
+    };
+  }
+  getName = async () => {
+    try {
+      var name = await AsyncStorage.getItem('Name');
+          this.setState({
+            name: name
+          });
+    } catch (error) {
+      console.log(error);
+    }
+  }
+  componentWillMount() {
+    this.getName();
+
+    var that = this;
+}
+
+  render() {
+
+    return (
+      <Text>ฉันดีใจที่คุณสามารถผ่านมันมาได้นะ และ
+หวังว่า {this.state.name}จะแชร์ความรู้สึกดีๆ ให้น้องการุ
+รับรู้อีกนะ 😁 </Text>
+
+    );
+  }
+}
+
+Relief.propTypes = {
+  steps: PropTypes.object,
+};
+
+Relief.defaultProps = {
+  steps: undefined,
+};
 
 class ShowResult extends React.Component {
     static navigationOptions = {
@@ -230,6 +326,9 @@ class App extends React.Component {
   FirstOpApp = () => {
       this.props.navigation.navigate('FirstOpApp');
   };
+  Behavior = () => {
+      this.props.navigation.navigate('Behavior');
+  };
 
   Name = async (value) => {
     try {
@@ -239,6 +338,8 @@ class App extends React.Component {
       // Error saving data
     }
   };
+
+
 
 
   render() {
@@ -835,7 +936,7 @@ class App extends React.Component {
                                     options: [
                                       {value:'ดี', label: 'ดี😃', trigger: 'FeelGood' },
                                       {value:'มีความสุข', label: 'มีความสุข😀', trigger: 'FeelGood' },
-                                      {value:'โล่งอก', label: 'โล่งอก😅', trigger: 'FeelGood' },
+                                      {value:'โล่งอก', label: 'โล่งอก😅', trigger: 'Feelrelief' },
                                       {value:'เหนื่อย', label: 'เหนื่อย😴', trigger: 'Feelsad' },
                                       {value:'นอนไม่หลับ', label: 'นอนไม่หลับ😵', trigger: 'HowToSleep' },
                                       {value:'ป่วย', label: 'ป่วย🤒', trigger: 'FeelSick' },
@@ -848,14 +949,63 @@ class App extends React.Component {
                                       {value:'อื่นๆ', label: 'อื่นๆนอกเหนือจากนี้', trigger: 'FeelLonely' },
                                     ],
                                   },
+                                  /////
                                   {
-                                    id: 'FeelGood',
-                                    message: 'ฉันดีใจมาก ที่คุณรู้สึก{previousValue}' ,
-                                    trigger: 'WhyYouFeel',
+                                    id: 'Feelrelief',
+                                    message: 'ว้าว! บอกให้ฉันรู้ได้ไหมว่ามีเกิดขึ้น แล้วทำให้คุณรู้สึก{previousValue}' ,
+                                    trigger: 'Feelreliefstciker',
                                   },
                                   {
-                                    id: 'WhyYouFeel',
-                                    message: 'บอกให้ฉันรู้ได้ไหมว่ามีอะไรเกิดขึ้น แล้วทำให้คุณรู้สึก{previousValue}' ,
+                                    id: 'Feelreliefstciker',
+                                    component:(
+                                      <Text>
+                                      <Image style={{ width: 90,height: 100,}} source={require('../assets/garoo/Glad.png')}/>
+                                       {'\n'}
+                                       {'\n'}
+                                       {'\n'}
+                                      </Text>
+                                    ),
+                                    asMessage:true,
+                                    trigger: 'whyYouFeelTypeFeelrelief',
+                                  },
+                                  {
+                                    id: 'whyYouFeelTypeFeelrelief',
+                                    user: true,
+                                    validator: (word) => {
+                          if (word.includes("ช่วยด้วย")|| word.includes("SOS") || word.includes("Help") || word.includes("ทั้งหมดเป็นความผิดของฉัน")
+                          || word.includes("ผิดเอง")|| word.includes("ไม่อยากอยู่อีกต่อไป") || word.includes("อยากตาย")
+                          || word.includes("จะฆ่าตัวตาย") || word.includes("ไม่ไหวแล้ว") || word.includes("อยากเจ็บปวด")
+                          || word.includes("อยากทำร้ายตัวเอง")  == true) {
+                            this.props.navigation.navigate('Let_talk');
+                          }
+                          return true;
+                        },
+                                    trigger: 'WhyYouFeelTypeAnswerFeelrelief',
+                                  },
+
+                                  {
+                                    id: 'WhyYouFeelTypeAnswerFeelrelief',
+                                    component:(<Relief/>),
+                                    asMessage: true ,
+                                    trigger: 'ThankMindbot',
+                                  },
+                                  /////////
+                                  {
+                                    id: 'FeelGood',
+                                    message: 'ฉันดีใจมาก ที่คุณรู้สึก{previousValue}บอกให้ฉันรู้ได้ไหมว่ามีอะไรเกิดขึ้น แล้วทำให้คุณรู้สึก{previousValue}' ,
+                                    trigger: 'FeelGoodstciker',
+                                  },
+                                  {
+                                    id: 'FeelGoodstciker',
+                                    component:(
+                                      <Text>
+                                      <Image style={{ width: 90,height: 100,}} source={require('../assets/garoo/Glad.png')}/>
+                                       {'\n'}
+                                       {'\n'}
+                                       {'\n'}
+                                      </Text>
+                                    ),
+                                    asMessage:true,
                                     trigger: 'whyYouFeelType',
                                   },
                                   {
@@ -875,7 +1025,8 @@ class App extends React.Component {
 
                                   {
                                     id: 'WhyYouFeelTypeAnswer',
-                                    message: 'ฉันดีใจที่คุณรู้สึกดีนะ และหวังว่าคุณจะแชร์ความรู้สึกดีๆให้ น้องการุ รับรู้อีกนะ 😊' ,
+                                    component:(<Happy/>),
+                                    asMessage: true ,
                                     trigger: 'ThankMindbot',
                                   },
                                   {
@@ -887,7 +1038,7 @@ class App extends React.Component {
                                   },
                                   {
                                     id: 'FeelTired',
-                                    message: 'คุณต้องการเข้ำรับกำรประเมินเบื้องต้นก่อนหรือไม' ,
+                                    message: 'คุณต้องการเข้ำรับการประเมินเบื้องต้นก่อนหรือไม' ,
                                     trigger: 'ThankMindbot1',
                                   },
                                   {
@@ -906,19 +1057,34 @@ class App extends React.Component {
                                   },
                                   {
                                     id: 'Feelsad',
-                                    message: 'ฉันหวังว่าคุณจะมีเวลาได้พักผ่อนบ้างนะ' ,
+                                    message: 'ฉันหวังว่าคุณจะมีเวลาพักผ่อนบ้างนะ' ,
                                     trigger: 'relex',
                                   },
                                   {
                                     id: 'relex',
                                     options: [
-                                      {value:'ขอบคุณครับ Garoo ', label: 'ขอบคุณครับ Garoo', trigger: 'giftbox' },
+                                      {value:'ขอบคุณครับ น้องการุ ', label: 'ขอบคุณครับ Garoo', trigger: 'giftbox' },
+                                      {value:'ขอบคุณค่ะ น้องการุ ', label: 'ขอบคุณครับ Garoo', trigger: 'giftbox' },
+                                      {value:'😭', label: '😭', trigger: 'giftbox' },
 
                                     ],
                                   },
                                   {
                                     id: 'giftbox',
-                                    message: 'ฉันมีของวิฉันมีของวิเศษซึ่งจะช่วยผ่อนคลายความเหนื่อยล้าให้คุณได้' ,
+                                    message: 'ฉันมีของวิเศษซึ่งจะช่วยผ่อนคลายความเหนื่อยล้าให้คุณได้' ,
+                                    trigger: 'giftboxsticker',
+                                  },
+                                  {
+                                    id: 'giftboxsticker',
+                                    component: (
+                                      <Text>
+                                      <Image style={{ width: 90,height: 100,}} source={require('../assets/garoo/Tools.png')}/>
+                                       {'\n'}
+                                       {'\n'}
+                                       {'\n'}
+                                      </Text>
+                                    ),
+                                    asMessage: true,
                                     trigger: 'TiredChoice',
                                   },
                                   {
@@ -958,14 +1124,14 @@ class App extends React.Component {
                                     },
                                     {
                                       id: 'HowToSleep',
-                                      component: (<Image style={{ width: 340,height: 300,  alignSelf: 'auto',}} source={{uri:'https://scontent.fbkk5-3.fna.fbcdn.net/v/t1.0-9/50058549_1983959065024959_412088230716899328_n.jpg?_nc_cat=105&_nc_ht=scontent.fbkk5-3.fna&oh=5d94fb7978181d3704643d148c187453&oe=5CBD10FC'} } />  ),
+                                      component: (<Image style={{ width: 400,height: 400,}} source={{uri:'https://www.jeban.com/userfiles/uploads/2013/08/Sleep-01.jpg'} } />  ),
                                       trigger: 'HowToSleepChoice',
                                     },
                                     {
                                       id: 'HowToSleepChoice',
                                       options: [
                                         {value:'ฉันง่วงนอนแล้วล่ะ',  label: 'ฉันง่วงนอนแล้วล่ะ 😴', trigger: 'GoodNight' },
-                                        {value:'ฉันจะพยายามทำตามคำแนะนะ',  label: 'ฉันจะพยายามทำตามคำแนะนะ 👌', trigger: 'HowToSleep1' },
+                                        {value:'ฉันจะพยายามทำตามคำแนะนำนะ',  label: 'ฉันจะพยายามทำตามคำแนะนำนะ 👌', trigger: 'HowToSleep1' },
                                       ],
                                     },
                                     {
@@ -977,8 +1143,10 @@ class App extends React.Component {
                                     {
                                       id: 'GoodNightChoice',
                                       options: [
-                                        {value:'Good Night Garoo !',  label: 'Good Night Garoo!', end: true },
+                                        {value:'เข้าใจแล้วจ้า น้องการุ',  label: 'เข้าใจแล้วจ้า น้องการุุ', end: true },
                                         {value:'ฝันดีนะ น้องการุ',  label: 'ฝันดีนะ น้องการุ', end: true },
+                                        {value:'Good Night Garoo !',  label: 'Good Night Garoo!', end: true },
+
                                       ],
                                     },
 
@@ -997,12 +1165,13 @@ class App extends React.Component {
                                       id: 'FeelSickChoice',
                                       options: [
                                         {value:'ขอบคุณนะ น้องการุ', label: 'ขอบคุณนะ น้องการุ', trigger:'NeedHelp1'},
-                                        {value:'ขอบคุณค่ะ', label: 'ขอบคุณค่ะ', trigger:'NeedHelp1'},
+                                        {value:' Thanks Garoo!', label: ' Thanks Garoo!', trigger:'NeedHelp1'},
+                                        {value:'😷', label: '😷', trigger:'NeedHelp1'},
                                       ],
                                     },
                                     {
                                       id: 'NeedHelp1',
-                                      message: 'คุณต้องการให้ฉันช่วยอะไรคุณไหม?' ,
+                                      message: 'คุณต้องการให้น้องการุช่วยอะไรไหม?' ,
                                       trigger: 'NeedHelpChoice',
                                     },
                                     {
@@ -1014,7 +1183,13 @@ class App extends React.Component {
                                     },
                                     {
                                       id: 'WantToFeelGood',
-                                      message: 'โชว์ข้อมูล เทคนิคที่ทำให้รู้สึกดีขึ้นยามป่วย' ,
+                                      component: (<Text>เทคนิคที่ทำให้รู้สึกดีขึ้นยามป่วย {'\n'}
+                                                        1. ทานของอุ่นๆ{'\n'}
+                                                        2. ทานผักและผลไม้เป็นประจำ โดยเฉพาะผลไม้รสเปรี้ยว เช่น ส้ม สัปปะรด{'\n'}
+                                                        3. นอนพักผ่อนให้เพียงพอ{'\n'}
+                                                        4. ปรับอิริยาบถ หรือ ขยับร่างกายทุก 3ชั่วโมง{'\n'}
+                                                        5. อย่าลืมรับประทานยาให้ตรงเวลา{'\n'}
+                                                    </Text>),
                                       trigger: 'WantToFeelGoodChoice',
                                     },
                                     {
@@ -1064,7 +1239,16 @@ class App extends React.Component {
                                       },
                                       {
                                         id: 'FeelAngry1',
-                                        message: 'เลือกได้เลยจ้า' ,
+                                        component:(
+                                          <Text>
+                                          <Image style={{ width: 90,height: 100,}} source={require('../assets/garoo/Tools.png')}/>
+                                           {'\n'}
+                                           {'\n'}
+                                           {'\n'}
+                                          </Text>
+
+                                        ),
+                                        asMessage:true,
                                         trigger: 'FeelAngryChoice',
                                       },
                                       {
@@ -1086,13 +1270,13 @@ class App extends React.Component {
                                       },
                                       {
                                         id: 'samati',
-                                        component: (<Image style={{ width: 350,height: 300,  alignSelf: 'auto',}} source={{uri:'https://uppic.cc/d/KRJB'} } />),
+                                        component: (<Image style={{ width,height: 300,}} source={{uri:'https://www.amarinbabyandkids.com/app/uploads/2017/02/%E0%B8%99%E0%B8%B1%E0%B9%88%E0%B8%87%E0%B8%AA%E0%B8%A1%E0%B8%B2%E0%B8%98%E0%B8%B4-22-1024x683.jpg'} } />),
                                         trigger: 'MeditationChoice1',
 
                                       },
                                       {
                                         id: 'Meditation2',
-                                        message: 'หลับตาแล้วทำจิตใจให้สงบประมาณ 5 นาทีนะ ⏱️' ,
+                                        message: 'หลับตาแล้วทำจิตใจให้สงบประมาณ 10 นาทีนะ ⏱️' ,
                                         trigger: 'MeditationChoice2',
                                       },
                                       {
@@ -1113,20 +1297,21 @@ class App extends React.Component {
                                       {
                                         id: 'Meditation5Choice',
                                         options: [
-                                          {value:'ขอบคุณครับ น้องการุ',  label: 'ขอบคุณครับ น้องการุ', trigger:'HowWasItNoqestion'},
-                                          {value:'ขอบคุณค่ะ น้องการุ', label: 'ขอบคุณค่ะ น้องการุ', trigger:'HowWasItNoqestion'},
+                                          {value:'ขอบใจจ้า น้องการุ',  label: 'ขอบใจจ้า น้องการุ', trigger:'HowWasItNoqestion'},
+                                          {value:'Thanks Garoo!ุ', label: 'Thanks Garoo!', trigger:'HowWasItNoqestion'},
+                                          {value:'😡', label: '😡', trigger:'HowWasItNoqestion'},
                                         ],
                                       },
                                       {
                                         id: 'MeditationChoice',
                                         options: [
-                                          {value:'ขั้นตอนต่อไป',  label: 'ขั้นตอนต่อไป', trigger:'MeditationChoice1'},
+                                          {value:'ขั้นตอนต่อไป',  label: 'ขั้นตอนต่อไป', trigger:'Meditation1'},
                                         ],
                                       },
                                       {
                                         id: 'MeditationChoice1',
                                         options: [
-                                          {value:'ขั้นตอนต่อไป', label: 'ขั้นตอนต่อไป', trigger:'MeditationChoice2'},
+                                          {value:'ขั้นตอนต่อไป', label: 'ขั้นตอนต่อไป', trigger:'Meditation2'},
                                         ],
                                       },
                                       {
@@ -1145,7 +1330,7 @@ class App extends React.Component {
                                       {
                                         id: 'BreathPracChoice',
                                         options: [
-                                          {value:'เรียบร้อยแล้ว น้องการุ', label: 'เรียบร้อยแล้ว น้องการุ', trigger:'cbt2'},
+                                          {value:'ส่วนนี้ต้องเอาข้อมูลมาจากแอพหลัก แต่ตอนนี้ยังไม่มีข้อมูลจึงตัดจบก่อน', label: 'ส่วนนี้ต้องเอาข้อมูลมาจากแอพหลัก แต่ตอนนี้ยังไม่มีข้อมูลจึงตัดจบก่อน', end:true},
                                         ],
                                       },
                                       {
@@ -1156,8 +1341,9 @@ class App extends React.Component {
                                       {
                                         id: 'FeelLonelyChoice',
                                         options: [
-                                          {value:'ขอบคุณครับ น้องการุ', label: 'ขอบคุณครับ น้องการุ', trigger:'FeelLonely2'},
-                                          {value:'ขอบคุณค่ะ น้องการุ', label: 'ขอบคุณค่ะ น้องการุ', trigger:'FeelLonely2'},
+                                          {value:'ขอบใจจ้า น้องการุ', label: 'ขอบใจจ้า น้องการ', trigger:'FeelLonely2'},
+                                          {value:'Thanks Garoo!', label: 'Thanks Garoo!ุ', trigger:'FeelLonely2'},
+                                          {value:'😢', label: '😢', trigger:'FeelLonely2'},
                                         ]
                                       },
                                       {
@@ -1210,63 +1396,14 @@ class App extends React.Component {
                                           message: 'ฉันหวังว่าเมื่อถึงเวลาจะมีใครสักคนที่เห็นคุณค่าในตัวคุณ เหมือนที่ฉันเห็นนะ' ,
                                           trigger: 'HowWasItNoqestion',
                                         },
+                                  //
                                         //Behavior บำบัดพฤติกรรม
                                         {
                                           id: 'Behavior',
-                                          message: 'เมื่อคุณรู้สึกแย่หรือจิตกกังวล คุณจะขาดแรงจูงใจจนไม่อยากจะทำกิจกรรมอย่างอื่นเลย' ,
-                                          trigger: 'BehaviorChoice',
+                                          component:(<Button title="กดปุ่มนี้สิ ฉันมีคำแนะนำจะทำให้รู้สึกดีขึ้น" onPress={this.Behavior}/>),
+
                                         },
-                                        {
-                                          id: 'BehaviorChoice',
-                                          options: [
-                                            {value:'ใช่ฉันเลย น้องการุ', label: 'ใช่ฉันเลย น้องการุ', trigger:'Behavior1'},
-                                            {value:'ฉันคิดว่านั่นไม่ใช่ฉันแล้วล่ะ น้องการุ', label: 'ฉันคิดว่านั่นไม่ใช่ฉันแล้วล่ะ น้องการุ', trigger:'FeelLonely5'},
-                                          ],
-                                        },
-                                        {
-                                          id: 'Behavior1',
-                                          message: 'ฉันเข้าใจความรู้สึกของคุณนะ' ,
-                                          trigger: 'Behavior2',
-                                        },
-                                        {
-                                          id: 'Behavior2',
-                                          message: 'คราวนี้ ฉันอาจจะใช้ของวิเศษที่ดีที่สุดของฉันแล้วล่ะ 🤔' ,
-                                          trigger: 'BehaviorChoice2',
-                                        },
-                                        {
-                                          id: 'BehaviorChoice2',
-                                          options: [
-                                            {value:'คืออะไรเหรอ?', label: 'คืออะไรเหรอ?', trigger:'Behavior3'},
-                                            {value:'เซอไพรส์ฉันสิ', label: 'เซอไพรส์ฉันสิ', trigger:'Behavior3'},
-                                          ],
-                                        },
-                                        {
-                                          id: 'Behavior3',
-                                          message: 'คือ คุณ ยังไงล่ะ' ,
-                                          trigger: 'Behavior4',
-                                        },
-                                        {
-                                          id: 'Behavior4',
-                                          message: 'ฉันทำไม่ได้แน่ๆ เลยหากขาด คุณ' ,
-                                          trigger: 'BehaviorChoice4',
-                                        },
-                                        {
-                                          id: 'BehaviorChoice4',
-                                          options: [
-                                            {value:'emoji_97', label: '😳', trigger:'Behavior5'},
-                                            {value:'emoji_96', label: '😂', trigger:'Behavior5'},
-                                          ],
-                                        },
-                                        {
-                                          id: 'Behavior5',
-                                          message: 'ฉันทำไม่ได้แน่ๆ เลยหากขาด คุณ' ,
-                                          trigger: 'BehaviorChoice4',
-                                        },
-                                        {
-                                          id: 'Behavior6',
-                                          message: 'ฉันทำไม่ได้แน่ๆ เลยหากขาด คุณ' ,
-                                          trigger: 'BehaviorChoice4',
-                                        },
+
 
               ]}
             />

@@ -8,6 +8,7 @@ import {
     Text,
     Button,
     Image,
+    Alert
 } from 'react-native';
 import {
     createSwitchNavigator,
@@ -17,19 +18,59 @@ import {
 
 import ChatBot from 'react-native-chatbot';
 import PlaySound from '../AbilityBot/PlaySound';
+import HomeScreen from '../navigation/HomeScreen';
+import { Icon } from 'react-native-elements'
+
 
 export default class Check_me extends React.Component {
-    static navigationOptions = {
-        title: 'Check_me',
+  static navigationOptions = ({ navigation }) => {
+    return {
+      title: "Check_me",
+      headerRight: (
+        <Icon
+raised
+name='home'
+color='#00aaff'
+onPress={() => navigation.navigate('FirstOpApp')} />
+                   )
+
     };
+  };
+//     static navigationOptions = ({navigation}) =>  {
+//       return{  title: 'Check_me',
+//         headerRight: (
+//           <Button
+//              title="go Home"
+//              onPress={() => navigation.popToTop()}
+//              )
+//
+// />};
+//
+
+
 
     HomeScreen = () => {
       this.props.navigation.navigate('HomeScreen');
+
   };
+  Let_talk = () => {
+    this.props.navigation.navigate('Let_talk');
+
+};
+Q9 = () => {
+  this.props.navigation.navigate('Q9');
+
+};
+Need_help = () => {
+  this.props.navigation.navigate('Need_help');
+
+};
 
   FirstOpApp = () => {
     this.props.navigation.navigate('FirstOpApp');
 };
+
+
 
     render() {
         return (
@@ -37,15 +78,20 @@ export default class Check_me extends React.Component {
           handleEnd={this.FirstOpApp}
           steps={[
             {
+              id: 'hello',
+              message: 'สวัสดีจ้า!',
+              trigger: '1',
+            },
+            {
               id: '1',
-              message: 'อาการชนิดไหนที่คุณต้องการเข้ารับการประเมินเบื้องต้น',
-              trigger: 'FeelGood_2',
+              message: 'คุณต้องการเข้ารับการประเมินอะไร บอกการุได้เลยจ้า 😀',
+              trigger: 'FeelGood_sticker',
             },
            {
-              id: 'FeelGood_2',
+              id: 'FeelGood_sticker',
               component: (
                 <Text>
-                <Image style={{ width: 90,height: 100,}} source={require('../assets/garoo/1.png')}/>
+                <Image style={{ width: 90,height: 100,}} source={require('../assets/garoo/Diagnose.png')}/>
                  {'\n'}
                  {'\n'}
                  {'\n'}
@@ -57,10 +103,30 @@ export default class Check_me extends React.Component {
             {
                 id: '2',
                   options: [
-                    { value:'ความเครียด วิตกกังวล และภาวะซึมเศร้า', label: 'ความเครียด วิตกกังวล และภาวะซึมเศร้า', trigger: 'HowYouFeel' },
-                    { value:'ความเสี่ยงในการทำร้ายตัวเองและการฆ่าตัวตาย', label: 'ความเสี่ยงในการทำร้ายตัวเองและการฆ่าตัวตาย', trigger: 'HowYouFeel' },
+                    { value:'ความเครียด วิตกกังวล และภาวะซึมเศร้า', label: 'ความเครียด วิตกกังวล และภาวะซึมเศร้า', trigger: '9Q' },
+                    { value:'ความเสี่ยงในการทำร้ายตัวเองและการฆ่าตัวตาย', label: 'ความเสี่ยงในการทำร้ายตัวเองและการฆ่าตัวตาย', trigger: '8Q' },
+                    { value:'ฉันต้องการความช่วยเหลืออย่างเร่งด่วน', label: 'ฉันต้องการความช่วยเหลืออย่างเร่งด่วน', trigger: 'Need_Helps' },
                   ],
                 },
+
+                {
+                  id: 'Need_Helps',
+                  component:(<Button title="เข้ารับการช่วยเหลือย่างเร่งด่วน" onPress={this.Need_help}/>) ,
+
+                },
+
+                {
+                  id: '9Q',
+                  component:(<Button title="เข้ารับการประเมิน9Q" onPress={this.Q9}/>) ,
+
+                },
+                {
+                  id: '8Q',
+                  component:(<Button title="เข้ารับการประเมิน8Q" onPress={this.Let_talk}/>),
+
+                },
+
+
                 // Deep-Mind analytic
               {
                 id: 'HowYouFeel',
